@@ -4,24 +4,10 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import './styles/Final_store_inventory_report.css'; // Import the CSS file
 import axios from "axios";
 import { GlobalStyles } from '@mui/material';
-import Button from '@mui/material/Button';
-import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import CancelIcon from '@mui/icons-material/Cancel';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Swal from 'sweetalert2';
-import EditIcon from "@mui/icons-material/Edit";
-import EditOffTwoToneIcon from '@mui/icons-material/EditOffTwoTone';
+import Search_Final_store_inventory_report from "../components/Search_Comp/Search_Final_store_inventory_report";
 
 import Navbar from "../components/navbar/Navbar";
 
@@ -49,6 +35,9 @@ export default function Final_store_inventory_report({ onSearch }) {
   const [distinctFinalInventoryReport, setdistinctFinalInventoryReport] = useState([]);
   const [distinctMatSummaryByStdPack, setdistinctMatSummaryByStdPack] = useState([]);
 
+  const [selectedFactory, setSelectedFactory] = useState(null);
+  const [selectedMatItem, setSelectedMatItem] = useState(null);
+  const [selectedLocCode, setSelectedLocCode] = useState(null);
   const [selectedRecordMatItem, setSelectedRecordMatItem] = useState(null);
 
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
@@ -84,7 +73,32 @@ export default function Final_store_inventory_report({ onSearch }) {
   const fetchFinalInventoryReport = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-final-inventory-report-datagrid`);
+      let factory_selected = '';
+      if (selectedFactory) {
+          factory_selected = selectedFactory;
+      } else {
+          factory_selected = 'All'
+      }
+      console.log('factory_selected' , factory_selected);
+      
+
+      let loc_selected = '';
+      if (selectedLocCode) {
+          loc_selected = selectedLocCode;
+      } else {
+          loc_selected = 'All'
+      }
+      console.log('loc_selected' , loc_selected);
+
+      let mat_selected = '';
+      if (selectedMatItem) {
+          mat_selected = selectedMatItem;
+      } else {
+          mat_selected = 'All'
+      }
+      console.log('mat_selected' , mat_selected);
+
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-final-inventory-report-datagrid?factory=${factory_selected}&loc_code=${loc_selected}&mat_item=${mat_selected}`);
       const data  = response.data;
       const rowsWithId = data.map((row, index) => ({
         ...row,
@@ -92,7 +106,7 @@ export default function Final_store_inventory_report({ onSearch }) {
       }));
       setdistinctFinalInventoryReport(rowsWithId);
     } catch (error) {
-      console.error(`Error fetching distinct data SUS Delivery order: ${error}`);
+      console.error(`Error fetching distinct data Final inventry: ${error}`);
     } finally {
       setIsLoading(false); 
     }
@@ -116,17 +130,21 @@ export default function Final_store_inventory_report({ onSearch }) {
   };
 
   useEffect(() => {
-    fetchFinalInventoryReport();
+    if (selectedFactory && selectedLocCode && selectedMatItem) {
+      fetchFinalInventoryReport();
+    }
+    // fetchFinalInventoryReport();
     if (selectedRecordMatItem) {
       fetchMatSummaryByStdPack();
     }
-  }, [selectedRecordMatItem]);
+  }, [selectedFactory, selectedLocCode, selectedMatItem, selectedRecordMatItem]);
 
   const openModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(true);
   };
   const closeModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(false);
+    setSelectedRecordMatItem(null);
   };
 
   const style_Modal = {
@@ -308,6 +326,13 @@ export default function Final_store_inventory_report({ onSearch }) {
       <Navbar onToggle={handleNavbarToggle}/>
       <Box marginLeft={isNavbarOpen ? "220px" : 4} marginTop={10}>
         <Box sx={{height: 800 , marginTop: '30px' , marginLeft: '60px'}}>
+          <Search_Final_store_inventory_report
+              onSearch={(queryParams) => {
+                setSelectedFactory(queryParams.factory);
+                setSelectedMatItem(queryParams.MatItem);
+                setSelectedLocCode(queryParams.Location);
+              }}
+          />
           <div  style={{backgroundColor:'#DFF5FF' , height: 570 , width: 1575}}>
             {isLoading ? (
               <Custom_Progress />
