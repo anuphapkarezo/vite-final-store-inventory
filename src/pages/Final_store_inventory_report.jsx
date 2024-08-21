@@ -34,15 +34,27 @@ export default function Final_store_inventory_report({ onSearch }) {
   );
   const [distinctFinalInventoryReport, setdistinctFinalInventoryReport] = useState([]);
   const [distinctMatSummaryByStdPack, setdistinctMatSummaryByStdPack] = useState([]);
+  const [distinctMatSummaryDetail, setdistinctMatSummaryDetail] = useState([]);
+  const [distinctMatSummaryDetailGood, setdistinctMatSummaryDetailGood] = useState([]);
+  const [distinctMatSummaryDetailExpired, setdistinctMatSummaryDetailExpired] = useState([]);
+
 
   const [selectedFactory, setSelectedFactory] = useState(null);
   const [selectedMatItem, setSelectedMatItem] = useState(null);
   const [selectedLocCode, setSelectedLocCode] = useState(null);
   const [selectedRecordMatItem, setSelectedRecordMatItem] = useState(null);
+  const [selectedRecordTotalPack, setSelectedRecordTotalPack] = useState(null);
+  const [selectedRecordTotalQty, setSelectedRecordTotalQty] = useState(null);
+  const [selectedRecordTotalGood, setSelectedRecordTotalGood] = useState(null);
+  const [selectedRecordTotalExpired, setSelectedRecordTotalExpired] = useState(null);
 
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen_MatSummaryByStdPack, setisModalOpen_MatSummaryByStdPack] = useState(false);
+  const [isModalOpen_MatSummaryDetail, setisModalOpen_MatSummaryDetail] = useState(false);
+  const [isModalOpen_MatSummaryDetailGood, setisModalOpen_MatSummaryDetailGood] = useState(false);
+  const [isModalOpen_MatSummaryDetailExpired, setisModalOpen_MatSummaryDetailExpired] = useState(false);
+
 
   const [filterModel, setFilterModel] = React.useState({
     items: [],
@@ -54,9 +66,27 @@ export default function Final_store_inventory_report({ onSearch }) {
     quickFilterExcludeHiddenColumns: true,
     quickFilterValues: [''],
   });
+  const [filterModel_MatSummaryDetail, setFilterModel_MatSummaryDetail] = React.useState({
+    items: [],
+    quickFilterExcludeHiddenColumns: true,
+    quickFilterValues: [''],
+  });
+  const [filterModel_MatSummaryDetailGood, setFilterModel_MatSummaryDetailGood] = React.useState({
+    items: [],
+    quickFilterExcludeHiddenColumns: true,
+    quickFilterValues: [''],
+  });
+  const [filterModel_MatSummaryDetailExpired, setFilterModel_MatSummaryDetailExpired] = React.useState({
+    items: [],
+    quickFilterExcludeHiddenColumns: true,
+    quickFilterValues: [''],
+  });
 
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
   const [columnVisibilityModel_MatSummaryByStdPack, setColumnVisibilityModel_MatSummaryByStdPack] = React.useState({});
+  const [columnVisibilityModel_MatSummaryDetail, setColumnVisibilityModel_MatSummaryDetail] = React.useState({});
+  const [columnVisibilityModel_MatSummaryDetailGood, setColumnVisibilityModel_MatSummaryDetailGood] = React.useState({});
+  const [columnVisibilityModel_MatSummaryDetailExpired, setColumnVisibilityModel_MatSummaryDetailExpired] = React.useState({});
 
   const handleNavbarToggle = (openStatus) => {
     setIsNavbarOpen(openStatus);
@@ -66,7 +96,35 @@ export default function Final_store_inventory_report({ onSearch }) {
     const TotalPackValue = parseInt(params.row.count_pack, 10);
     if (params.field === 'count_pack' && TotalPackValue > 0) {
       setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordTotalPack(params.row.count_pack.toLocaleString());
       openModal_MatSummaryByStdPack()
+    }
+  };
+
+  const handleCellTotalQtyClick = (params) => {
+    const TotalQtyValue = parseInt(params.row.sum_total, 10);
+    if (params.field === 'sum_total' && TotalQtyValue > 0) {
+      setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordTotalQty(params.row.sum_total.toLocaleString());
+      openModal_MatSummaryDetail()
+    }
+  };
+
+  const handleCellTotalGoodClick = (params) => {
+    const TotalGoodValue = parseInt(params.row.sum_good, 10);
+    if (params.field === 'sum_good' && TotalGoodValue > 0) {
+      setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordTotalGood(params.row.sum_good.toLocaleString());
+      openModal_MatSummaryDetailGood()
+    }
+  };
+
+  const handleCellTotalExpiredClick = (params) => {
+    const TotalExpiredValue = parseInt(params.row.sum_expired, 10);
+    if (params.field === 'sum_expired' && TotalExpiredValue > 0) {
+      setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordTotalExpired(params.row.sum_expired.toLocaleString());
+      openModal_MatSummaryDetailExpired()
     }
   };
 
@@ -129,6 +187,57 @@ export default function Final_store_inventory_report({ onSearch }) {
     }
   };
 
+  const fetchMatSummaryDetail = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail?mat_item=${selectedRecordMatItem}`);
+      const data  = response.data;
+      const rowsWithId = data.map((row, index) => ({
+        ...row,
+        id: index, 
+      }));
+      setdistinctMatSummaryDetail(rowsWithId);
+    } catch (error) {
+      console.error(`Error fetching distinct data SUS Delivery order: ${error}`);
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  const fetchMatSummaryDetailGood = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-good?mat_item=${selectedRecordMatItem}`);
+      const data  = response.data;
+      const rowsWithId = data.map((row, index) => ({
+        ...row,
+        id: index, 
+      }));
+      setdistinctMatSummaryDetailGood(rowsWithId);
+    } catch (error) {
+      console.error(`Error fetching distinct data SUS Delivery order: ${error}`);
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  const fetchMatSummaryDetailExpired = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-expired?mat_item=${selectedRecordMatItem}`);
+      const data  = response.data;
+      const rowsWithId = data.map((row, index) => ({
+        ...row,
+        id: index, 
+      }));
+      setdistinctMatSummaryDetailExpired(rowsWithId);
+    } catch (error) {
+      console.error(`Error fetching distinct data SUS Delivery order: ${error}`);
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
   useEffect(() => {
     if (selectedFactory && selectedLocCode && selectedMatItem) {
       fetchFinalInventoryReport();
@@ -136,6 +245,9 @@ export default function Final_store_inventory_report({ onSearch }) {
     // fetchFinalInventoryReport();
     if (selectedRecordMatItem) {
       fetchMatSummaryByStdPack();
+      fetchMatSummaryDetail();
+      fetchMatSummaryDetailGood();
+      fetchMatSummaryDetailExpired();
     }
   }, [selectedFactory, selectedLocCode, selectedMatItem, selectedRecordMatItem]);
 
@@ -144,6 +256,30 @@ export default function Final_store_inventory_report({ onSearch }) {
   };
   const closeModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(false);
+    setSelectedRecordMatItem(null);
+  };
+
+  const openModal_MatSummaryDetail = () => {
+    setisModalOpen_MatSummaryDetail(true);
+  };
+  const closeModal_MatSummaryDetail = () => {
+    setisModalOpen_MatSummaryDetail(false);
+    setSelectedRecordMatItem(null);
+  };
+
+  const openModal_MatSummaryDetailGood = () => {
+    setisModalOpen_MatSummaryDetailGood(true);
+  };
+  const closeModal_MatSummaryDetailGood = () => {
+    setisModalOpen_MatSummaryDetailGood(false);
+    setSelectedRecordMatItem(null);
+  };
+
+  const openModal_MatSummaryDetailExpired = () => {
+    setisModalOpen_MatSummaryDetailExpired(true);
+  };
+  const closeModal_MatSummaryDetailExpired = () => {
+    setisModalOpen_MatSummaryDetailExpired(false);
     setSelectedRecordMatItem(null);
   };
 
@@ -314,6 +450,125 @@ export default function Final_store_inventory_report({ onSearch }) {
     },
   ]
 
+  const columns_MatSummaryDetail= [
+    { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' },
+    { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'bar_code', headerName: 'Barcode', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'supp_name', headerName: 'Supplier', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'invoice', headerName: 'Invoice', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_qty', headerName: 'Qty. (pcs)', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
+      valueFormatter: (params) => {
+        if (params.value == null) {
+          return '';
+        }
+        const value = parseInt(params.value, 10);
+        return isNaN(value) ? '' : value.toLocaleString();
+      },
+    },
+    { field: 'rec_date', headerName: 'Receive Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_date', headerName: 'Expired Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_status', headerName: 'Status', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
+      renderCell: (params) => {
+        let backgroundColor = '';
+        switch (params.value) {
+          case 'Good':
+            backgroundColor = 'lightgreen';
+            break;
+          case 'Expired':
+            backgroundColor = 'red';
+            break;
+          default:
+            break;
+        }
+        return (
+          <div style={{ backgroundColor: backgroundColor, width: '100%', height: '100%', textAlign: 'center' , paddingTop: 5}}>
+            {params.value}
+          </div>
+        );
+      }
+    },
+  ]
+
+  const columns_MatSummaryDetailGood= [
+    { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' },
+    { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'bar_code', headerName: 'Barcode', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'supp_name', headerName: 'Supplier', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'invoice', headerName: 'Invoice', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_qty', headerName: 'Qty. (pcs)', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
+      valueFormatter: (params) => {
+        if (params.value == null) {
+          return '';
+        }
+        const value = parseInt(params.value, 10);
+        return isNaN(value) ? '' : value.toLocaleString();
+      },
+    },
+    { field: 'rec_date', headerName: 'Receive Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_date', headerName: 'Expired Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_status', headerName: 'Status', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
+      renderCell: (params) => {
+        let backgroundColor = '';
+        switch (params.value) {
+          case 'Good':
+            backgroundColor = 'lightgreen';
+            break;
+          case 'Expired':
+            backgroundColor = 'red';
+            break;
+          default:
+            break;
+        }
+        return (
+          <div style={{ backgroundColor: backgroundColor, width: '100%', height: '100%', textAlign: 'center' , paddingTop: 5}}>
+            {params.value}
+          </div>
+        );
+      }
+    },
+  ]
+
+  const columns_MatSummaryDetailExpired= [
+    { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' },
+    { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'bar_code', headerName: 'Barcode', width: 150 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'supp_name', headerName: 'Supplier', width: 200 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'invoice', headerName: 'Invoice', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'mat_qty', headerName: 'Qty. (pcs)', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
+      valueFormatter: (params) => {
+        if (params.value == null) {
+          return '';
+        }
+        const value = parseInt(params.value, 10);
+        return isNaN(value) ? '' : value.toLocaleString();
+      },
+    },
+    { field: 'rec_date', headerName: 'Receive Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_date', headerName: 'Expired Date', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
+    { field: 'exp_status', headerName: 'Status', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
+      renderCell: (params) => {
+        let backgroundColor = '';
+        switch (params.value) {
+          case 'Good':
+            backgroundColor = 'lightgreen';
+            break;
+          case 'Expired':
+            backgroundColor = 'red';
+            break;
+          default:
+            break;
+        }
+        return (
+          <div style={{ backgroundColor: backgroundColor, width: '100%', height: '100%', textAlign: 'center' , paddingTop: 5}}>
+            {params.value}
+          </div>
+        );
+      }
+    },
+  ]
   
   return (
     <>
@@ -358,6 +613,9 @@ export default function Final_store_inventory_report({ onSearch }) {
                 }}
                 onCellClick={(event) => { 
                   handleCellTotalPackClick(event); 
+                  handleCellTotalQtyClick(event);
+                  handleCellTotalGoodClick(event);
+                  handleCellTotalExpiredClick(event);
                 }} 
               />
             )}
@@ -399,6 +657,9 @@ export default function Final_store_inventory_report({ onSearch }) {
                   <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
                         : {selectedRecordMatItem}
                   </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        ({selectedRecordTotalPack} Pack)
+                  </label>
                 </div>
                 <div>
                   <IconButton onClick={closeModal_MatSummaryByStdPack}>
@@ -421,6 +682,231 @@ export default function Final_store_inventory_report({ onSearch }) {
                       columnVisibilityModel={columnVisibilityModel_MatSummaryByStdPack}
                       onColumnVisibilityModelChange={(newModel) =>
                         setColumnVisibilityModel_MatSummaryByStdPack(newModel)
+                      }
+                      getRowHeight={() => 35} // Set the desired row height here
+                      sx={{
+                        '& .MuiDataGrid-row': {
+                          backgroundColor: '#F6F5F5', // Change to desired color
+                        },
+                      }}
+                    />
+                  </>
+                )}
+              </div>
+            </Box>
+          </Modal>
+        )}
+        {isModalOpen_MatSummaryDetail && (
+          <Modal
+            open={isModalOpen_MatSummaryDetail}
+            onClose={closeModal_MatSummaryDetail}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box
+              sx={{
+                ...style_Modal,
+                width: 1560,
+                height: 700,
+                backgroundColor: "#CAF4FF",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <label htmlFor="" style={{ fontSize: '27px' , color: 'blue' , textDecoration: 'underline' , marginLeft: 10 }}>
+                     Material summary  details
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        : {selectedRecordMatItem}
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        ({selectedRecordTotalQty} Pcs.)
+                  </label>
+                </div>
+                <div>
+                  <IconButton onClick={closeModal_MatSummaryDetail}>
+                    <CloseIcon style={{backgroundColor: '#FF7D29'}}/>
+                  </IconButton>
+                </div>
+              </div>
+              <div style={{ height: 620 , width: "100%" , backgroundColor: '#DFF5FF' }}>
+                {isLoading ? (
+                    <Custom_Progress />
+                ) : (
+                  <>
+                    <DataGrid
+                      columns={columns_MatSummaryDetail}
+                      rows={distinctMatSummaryDetail}
+                      slots={{ toolbar: GridToolbar }}
+                      filterModel={filterModel_MatSummaryDetail}
+                      onFilterModelChange={(newModel) => setFilterModel_MatSummaryDetail(newModel)}
+                      slotProps={{ toolbar: { showQuickFilter: true } }}
+                      columnVisibilityModel={columnVisibilityModel_MatSummaryDetail}
+                      onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel_MatSummaryDetail(newModel)
+                      }
+                      getRowHeight={() => 35} // Set the desired row height here
+                      sx={{
+                        '& .MuiDataGrid-row': {
+                          backgroundColor: '#F6F5F5', // Change to desired color
+                        },
+                      }}
+                    />
+                  </>
+                )}
+              </div>
+            </Box>
+          </Modal>
+        )}
+        {isModalOpen_MatSummaryDetailGood && (
+          <Modal
+            open={isModalOpen_MatSummaryDetailGood}
+            onClose={closeModal_MatSummaryDetailGood}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box
+              sx={{
+                ...style_Modal,
+                width: 1560,
+                height: 700,
+                backgroundColor: "#CAF4FF",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <label htmlFor="" style={{ fontSize: '27px' , color: 'blue' , textDecoration: 'underline' , marginLeft: 10 }}>
+                     Material summary  details (Good)
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        : {selectedRecordMatItem}
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        ({selectedRecordTotalGood} Pcs.)
+                  </label>
+                </div>
+                <div>
+                  <IconButton onClick={closeModal_MatSummaryDetailGood}>
+                    <CloseIcon style={{backgroundColor: '#FF7D29'}}/>
+                  </IconButton>
+                </div>
+              </div>
+              <div style={{ height: 620 , width: "100%" , backgroundColor: '#DFF5FF' }}>
+                {isLoading ? (
+                    <Custom_Progress />
+                ) : (
+                  <>
+                    <DataGrid
+                      columns={columns_MatSummaryDetailGood}
+                      rows={distinctMatSummaryDetailGood}
+                      slots={{ toolbar: GridToolbar }}
+                      filterModel={filterModel_MatSummaryDetailGood}
+                      onFilterModelChange={(newModel) => setFilterModel_MatSummaryDetailGood(newModel)}
+                      slotProps={{ toolbar: { showQuickFilter: true } }}
+                      columnVisibilityModel={columnVisibilityModel_MatSummaryDetailGood}
+                      onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel_MatSummaryDetailGood(newModel)
+                      }
+                      getRowHeight={() => 35} // Set the desired row height here
+                      sx={{
+                        '& .MuiDataGrid-row': {
+                          backgroundColor: '#F6F5F5', // Change to desired color
+                        },
+                      }}
+                    />
+                  </>
+                )}
+              </div>
+            </Box>
+          </Modal>
+        )}
+        {isModalOpen_MatSummaryDetailExpired && (
+          <Modal
+            open={isModalOpen_MatSummaryDetailExpired}
+            onClose={closeModal_MatSummaryDetailExpired}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box
+              sx={{
+                ...style_Modal,
+                width: 1560,
+                height: 700,
+                backgroundColor: "#CAF4FF",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <label htmlFor="" style={{ fontSize: '27px' , color: 'blue' , textDecoration: 'underline' , marginLeft: 10 }}>
+                     Material summary  details (Expired)
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        : {selectedRecordMatItem}
+                  </label>
+                  <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
+                        ({selectedRecordTotalExpired} Pcs.)
+                  </label>
+                </div>
+                <div>
+                  <IconButton onClick={closeModal_MatSummaryDetailExpired}>
+                    <CloseIcon style={{backgroundColor: '#FF7D29'}}/>
+                  </IconButton>
+                </div>
+              </div>
+              <div style={{ height: 620 , width: "100%" , backgroundColor: '#DFF5FF' }}>
+                {isLoading ? (
+                    <Custom_Progress />
+                ) : (
+                  <>
+                    <DataGrid
+                      columns={columns_MatSummaryDetailExpired}
+                      rows={distinctMatSummaryDetailExpired}
+                      slots={{ toolbar: GridToolbar }}
+                      filterModel={filterModel_MatSummaryDetailExpired}
+                      onFilterModelChange={(newModel) => setFilterModel_MatSummaryDetailExpired(newModel)}
+                      slotProps={{ toolbar: { showQuickFilter: true } }}
+                      columnVisibilityModel={columnVisibilityModel_MatSummaryDetailExpired}
+                      onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel_MatSummaryDetailExpired(newModel)
                       }
                       getRowHeight={() => 35} // Set the desired row height here
                       sx={{
