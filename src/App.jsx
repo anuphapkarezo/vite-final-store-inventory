@@ -11,12 +11,12 @@ export default function App() {
   return (
     
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/smart-final-store-inventory/" element={<Login />} />
+          <Route path="/smart-final-store-inventory/login" element={<Login />} />
 
             <Route element={<ProtectedRoutes />}>
-              <Route path="/home" element={<Navbar />} />
-              <Route path="/fin_store_inventory_report" element={<Final_store_inventory_report />}/>
+              <Route path="/smart-final-store-inventory/home" element={<Navbar />} />
+              <Route path="/smart-final-store-inventory/fin_store_inventory_report" element={<Final_store_inventory_report />}/>
             </Route>
         </Routes>
   );
