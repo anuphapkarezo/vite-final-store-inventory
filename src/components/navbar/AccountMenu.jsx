@@ -38,7 +38,7 @@ export default function AccountMenu() {
       if (result.isConfirmed) {
         // Perform the logout action here, e.g., clearing authentication tokens, redirecting to a login page, etc.
         Swal.fire("Logged out!", "You have been logged out.", "success");
-        navigate("/login");
+        navigate("smart-final-store-inventory/login");
         // console.log("User logged out");
         localStorage.removeItem("user");
         localStorage.clear();
