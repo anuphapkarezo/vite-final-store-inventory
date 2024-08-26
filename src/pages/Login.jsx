@@ -45,7 +45,7 @@ function Login() {
             title: "Login Success",
             text: "Welcome to Final store inventory report",
           });
-          navigate("/home");
+          navigate("/smart-final-store-inventory/home");
         } else {
           console.log("Login failed");
           Swal.fire({
