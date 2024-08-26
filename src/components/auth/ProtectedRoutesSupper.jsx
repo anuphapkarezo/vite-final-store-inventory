@@ -15,7 +15,7 @@ function ProtectedRoutesSupper() {
       title: "Your role is not permitted",
       text: "Please contact your administrator",
     });
-    return <Navigate to="/home" />;
+    return <Navigate to="/smart-final-store-inventory/home" />;
   }
   return <Outlet />;
 }

@@ -140,7 +140,7 @@ export default function Navbar({ onToggle }) {
         break;
       default:
         setMenuName("FINAL STORE INVENTORY REPORT");
-        setMenuIcon(<img src="/home.png" alt="" width={30} />);
+        setMenuIcon(<img src="/smart-final-store-inventory/inventory-home.png" alt="" width={30} />);
     }
   }, [location.pathname]);
 
@@ -207,7 +207,7 @@ export default function Navbar({ onToggle }) {
 
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <Link to="/home">
+            <Link to="/smart-final-store-inventory/home">
               <img
                 src={Fuji}
                 alt="คำอธิบายภาพ"
