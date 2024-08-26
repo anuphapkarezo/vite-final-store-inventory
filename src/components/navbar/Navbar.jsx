@@ -136,7 +136,7 @@ export default function Navbar({ onToggle }) {
     switch (location.pathname) {
       case "/smart-final-store-inventory/fin_store_inventory_report":
         setMenuName("Material Inventory Report");
-        setMenuIcon(<img src="/inventory-report.png" alt="" width={30} />);
+        setMenuIcon(<img src="/smart-final-store-inventory/inventory-report.png" alt="" width={30} />);
         break;
       default:
         setMenuName("FINAL STORE INVENTORY REPORT");
@@ -256,7 +256,7 @@ export default function Navbar({ onToggle }) {
                     },
                   }}
                 >
-                  <img src="/inventory-report.png" alt="" width={30} />
+                  <img src="/smart-final-store-inventory/inventory-report.png" alt="" width={30} />
                   
                 </ListItemIcon>
                 <ListItemText
