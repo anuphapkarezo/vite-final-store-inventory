@@ -68,16 +68,8 @@ function Login() {
 
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div className="login-container h-fit">
-            {/* <img
-                src={authorixation}
-                alt="authorixation"
-                className="login-logo"
-                style={{
-                  width: 40,
-                }}
-            /> */}
           <div className="title-container flex justify-center">
             <div className="flex items-center">
                 <img

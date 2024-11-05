@@ -242,14 +242,16 @@ export default function Final_store_inventory_report({ onSearch }) {
     if (selectedFactory && selectedLocCode && selectedMatItem) {
       fetchFinalInventoryReport();
     }
-    // fetchFinalInventoryReport();
+  }, [selectedFactory, selectedLocCode, selectedMatItem]);
+
+  useEffect(() => {
     if (selectedRecordMatItem) {
       fetchMatSummaryByStdPack();
       fetchMatSummaryDetail();
       fetchMatSummaryDetailGood();
       fetchMatSummaryDetailExpired();
     }
-  }, [selectedFactory, selectedLocCode, selectedMatItem, selectedRecordMatItem]);
+  }, [selectedRecordMatItem]);
 
   const openModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(true);
