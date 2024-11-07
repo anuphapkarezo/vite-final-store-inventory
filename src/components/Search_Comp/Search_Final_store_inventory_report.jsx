@@ -68,6 +68,9 @@ function Search_Final_store_inventory_report({ onSearch }) {
             } else {
                 loc_selected = 'All'
             }
+            console.log('factory_selected',factory_selected);
+            console.log('loc_selected',loc_selected);
+            
             const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-item-list-final-inventory-report?factory=${factory_selected}&loc_code=${loc_selected}`);
             const data  = response.data;
             setdistinctMatItem(data);
@@ -80,7 +83,7 @@ function Search_Final_store_inventory_report({ onSearch }) {
         fetchFactorytList();
         fetchLocCodetList(); 
         fetchMatitemtList();  
-    }, []);
+    }, [selectedFactory, selectedLocCode]);
 
     const handleFactoryChange = (event, newValue) => {
         setSelectedFactory(newValue);

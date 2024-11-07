@@ -147,7 +147,7 @@ export default function Navbar({ onToggle }) {
   const getUserDataString = localStorage.getItem('userToken'); // Retrieve the string
     const getUserData = JSON.parse(getUserDataString); // Parse the string to an object
     const getUserRoleNo = getUserData.role_no; // Access the property
-    console.log(getUserRoleNo); // Output the value
+    // console.log(getUserRoleNo); // Output the value
 
 
   

@@ -43,6 +43,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const [selectedMatItem, setSelectedMatItem] = useState(null);
   const [selectedLocCode, setSelectedLocCode] = useState(null);
   const [selectedRecordMatItem, setSelectedRecordMatItem] = useState(null);
+  const [selectedRecordLocCode, setSelectedRecordLocCode] = useState(null);
   const [selectedRecordTotalPack, setSelectedRecordTotalPack] = useState(null);
   const [selectedRecordTotalQty, setSelectedRecordTotalQty] = useState(null);
   const [selectedRecordTotalGood, setSelectedRecordTotalGood] = useState(null);
@@ -96,6 +97,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     const TotalPackValue = parseInt(params.row.count_pack, 10);
     if (params.field === 'count_pack' && TotalPackValue > 0) {
       setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordLocCode(params.row.loc_code);
       setSelectedRecordTotalPack(params.row.count_pack.toLocaleString());
       openModal_MatSummaryByStdPack()
     }
@@ -105,6 +107,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     const TotalQtyValue = parseInt(params.row.sum_total, 10);
     if (params.field === 'sum_total' && TotalQtyValue > 0) {
       setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordLocCode(params.row.loc_code);
       setSelectedRecordTotalQty(params.row.sum_total.toLocaleString());
       openModal_MatSummaryDetail()
     }
@@ -114,6 +117,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     const TotalGoodValue = parseInt(params.row.sum_good, 10);
     if (params.field === 'sum_good' && TotalGoodValue > 0) {
       setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordLocCode(params.row.loc_code);
       setSelectedRecordTotalGood(params.row.sum_good.toLocaleString());
       openModal_MatSummaryDetailGood()
     }
@@ -123,6 +127,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     const TotalExpiredValue = parseInt(params.row.sum_expired, 10);
     if (params.field === 'sum_expired' && TotalExpiredValue > 0) {
       setSelectedRecordMatItem(params.row.mat_item);
+      setSelectedRecordLocCode(params.row.loc_code);
       setSelectedRecordTotalExpired(params.row.sum_expired.toLocaleString());
       openModal_MatSummaryDetailExpired()
     }
@@ -137,7 +142,7 @@ export default function Final_store_inventory_report({ onSearch }) {
       } else {
           factory_selected = 'All'
       }
-      console.log('factory_selected' , factory_selected);
+      // console.log('factory_selected' , factory_selected);
       
 
       let loc_selected = '';
@@ -146,7 +151,7 @@ export default function Final_store_inventory_report({ onSearch }) {
       } else {
           loc_selected = 'All'
       }
-      console.log('loc_selected' , loc_selected);
+      // console.log('loc_selected' , loc_selected);
 
       let mat_selected = '';
       if (selectedMatItem) {
@@ -154,7 +159,7 @@ export default function Final_store_inventory_report({ onSearch }) {
       } else {
           mat_selected = 'All'
       }
-      console.log('mat_selected' , mat_selected);
+      // console.log('mat_selected' , mat_selected);
 
       const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-final-inventory-report-datagrid?factory=${factory_selected}&loc_code=${loc_selected}&mat_item=${mat_selected}`);
       const data  = response.data;
@@ -173,7 +178,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const fetchMatSummaryByStdPack = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-by-std-pack?mat_item=${selectedRecordMatItem}`);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-by-std-pack?mat_item=${selectedRecordMatItem}&loc_code=${selectedRecordLocCode}`);
       const data  = response.data;
       const rowsWithId = data.map((row, index) => ({
         ...row,
@@ -190,7 +195,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const fetchMatSummaryDetail = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail?mat_item=${selectedRecordMatItem}`);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail?mat_item=${selectedRecordMatItem}&loc_code=${selectedRecordLocCode}`);
       const data  = response.data;
       const rowsWithId = data.map((row, index) => ({
         ...row,
@@ -207,7 +212,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const fetchMatSummaryDetailGood = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-good?mat_item=${selectedRecordMatItem}`);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-good?mat_item=${selectedRecordMatItem}&loc_code=${selectedRecordLocCode}`);
       const data  = response.data;
       const rowsWithId = data.map((row, index) => ({
         ...row,
@@ -245,13 +250,13 @@ export default function Final_store_inventory_report({ onSearch }) {
   }, [selectedFactory, selectedLocCode, selectedMatItem]);
 
   useEffect(() => {
-    if (selectedRecordMatItem) {
+    if (selectedRecordMatItem && selectedRecordLocCode) {
       fetchMatSummaryByStdPack();
       fetchMatSummaryDetail();
       fetchMatSummaryDetailGood();
       fetchMatSummaryDetailExpired();
     }
-  }, [selectedRecordMatItem]);
+  }, [selectedRecordMatItem, selectedRecordLocCode]);
 
   const openModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(true);
@@ -259,6 +264,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const closeModal_MatSummaryByStdPack = () => {
     setisModalOpen_MatSummaryByStdPack(false);
     setSelectedRecordMatItem(null);
+    setSelectedRecordLocCode(null);
   };
 
   const openModal_MatSummaryDetail = () => {
@@ -267,6 +273,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const closeModal_MatSummaryDetail = () => {
     setisModalOpen_MatSummaryDetail(false);
     setSelectedRecordMatItem(null);
+    setSelectedRecordLocCode(null);
   };
 
   const openModal_MatSummaryDetailGood = () => {
@@ -275,6 +282,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const closeModal_MatSummaryDetailGood = () => {
     setisModalOpen_MatSummaryDetailGood(false);
     setSelectedRecordMatItem(null);
+    setSelectedRecordLocCode(null);
   };
 
   const openModal_MatSummaryDetailExpired = () => {
@@ -283,6 +291,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const closeModal_MatSummaryDetailExpired = () => {
     setisModalOpen_MatSummaryDetailExpired(false);
     setSelectedRecordMatItem(null);
+    setSelectedRecordLocCode(null);
   };
 
   const style_Modal = {
