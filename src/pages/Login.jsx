@@ -116,7 +116,7 @@ function Login() {
               Go to dashboard with guest
             </Link> */}
           </form>
-          <div style={{
+          {/* <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -131,7 +131,7 @@ function Login() {
             }}>
                 Noted : Shutdown Server 7/11/24, 06:00 PM - 8/11/24, 08:00 AM.
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

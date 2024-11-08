@@ -414,7 +414,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left' },
     { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'std_pack', headerName: 'Std. Pack', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
+    { field: 'std_pack', headerName: 'Pcs/Pack', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
       valueFormatter: (params) => {
         if (params.value == null) {
           return '';
@@ -663,7 +663,7 @@ export default function Final_store_inventory_report({ onSearch }) {
                   }}
                 >
                   <label htmlFor="" style={{ fontSize: '27px' , color: 'blue' , textDecoration: 'underline' , marginLeft: 10 }}>
-                     Material summary  by Standard Packing
+                     Material summary by Standard Packing
                   </label>
                   <label htmlFor="" style={{ fontSize: '27px' , marginLeft: 10 , color: '#FA7070'}}>
                         : {selectedRecordMatItem}
