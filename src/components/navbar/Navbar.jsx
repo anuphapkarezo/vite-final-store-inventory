@@ -135,7 +135,7 @@ export default function Navbar({ onToggle }) {
   React.useEffect(() => {
     switch (location.pathname) {
       case "/smart-final-store-inventory/fin_store_inventory_report":
-        setMenuName("Material Inventory Report");
+        setMenuName("MATERIAL INVENTORY REPORT");
         setMenuIcon(<img src="/smart-final-store-inventory/inventory-report.png" alt="" width={30} />);
         break;
       default:
@@ -229,10 +229,10 @@ export default function Navbar({ onToggle }) {
 
           {/* //*Menu list ****************************************************** */}
 
-          {/* //Material Inventory Report */}
+          {/* //MATERIAL INVENTORY REPORT */}
           <List open={open}>
             <ListItem
-              onClick={() => setMenuName("Material Inventory Report")}
+              onClick={() => setMenuName("MATERIAL INVENTORY REPORT")}
               disablePadding
               sx={{ display: "block", color: "black" }}
               component={Link}

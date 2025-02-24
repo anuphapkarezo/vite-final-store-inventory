@@ -48,6 +48,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const [selectedRecordTotalQty, setSelectedRecordTotalQty] = useState(null);
   const [selectedRecordTotalGood, setSelectedRecordTotalGood] = useState(null);
   const [selectedRecordTotalExpired, setSelectedRecordTotalExpired] = useState(null);
+  const [selectedCleardata, setSelectedCleardata] = useState(null);
 
   const [isNavbarOpen, setIsNavbarOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -229,7 +230,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const fetchMatSummaryDetailExpired = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-expired?mat_item=${selectedRecordMatItem}`);
+      const response = await axios.get(`http://10.17.66.242:3001/api/smart_sus/filter-mat-summary-detail-expired?mat_item=${selectedRecordMatItem}&loc_code=${selectedRecordLocCode}`);
       const data  = response.data;
       const rowsWithId = data.map((row, index) => ({
         ...row,
@@ -244,6 +245,9 @@ export default function Final_store_inventory_report({ onSearch }) {
   };
 
   useEffect(() => {
+    if (selectedCleardata) {
+      setdistinctFinalInventoryReport([])
+    } 
     if (selectedFactory && selectedLocCode && selectedMatItem) {
       fetchFinalInventoryReport();
     }
@@ -597,6 +601,7 @@ export default function Final_store_inventory_report({ onSearch }) {
                 setSelectedFactory(queryParams.factory);
                 setSelectedMatItem(queryParams.MatItem);
                 setSelectedLocCode(queryParams.Location);
+                setSelectedCleardata(queryParams.clear_data);
               }}
           />
           <div  style={{backgroundColor:'#DFF5FF' , height: 570 , width: 1575}}>

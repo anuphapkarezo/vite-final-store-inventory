@@ -110,7 +110,21 @@ function Search_Final_store_inventory_report({ onSearch }) {
             MatItem,
             Location,
         };
-        console.log('Query Params:', queryParams);
+        // console.log('Query Params:', queryParams);
+        onSearch(queryParams);
+    };
+
+    const handleClear = () => {
+        setSelectedFactory(null);
+        setSelectedLocCode(null);
+        setSelectedMatItem(null);
+
+        const clear_data = 'Clear Data';
+
+        const queryParams = {
+            clear_data
+        };
+        // console.log('Query Params:', queryParams);
         onSearch(queryParams);
     };
 
@@ -164,13 +178,30 @@ function Search_Final_store_inventory_report({ onSearch }) {
                     </Grid>
 
                     <Grid  item xs={2} md={1} style={{ marginLeft: '85px' }} >
-                        <Button 
+                        {/* <Button 
                             variant="contained" 
                             // size="small"
                             style={{width: '130px', height: '55px' , marginTop: '5px'}}
                             onClick={handleSearch}
                             endIcon={<SearchIcon />}
                             >Search
+                        </Button> */}
+                        <Button 
+                            className="btn_hover"
+                            onClick={handleSearch}
+                            // style={{marginTop: '5px'}}
+                            // variant="contained" 
+                            // // size="small"
+                            // onClick={handleSearch}
+                            // endIcon={<SearchIcon />}
+                            >
+                            <img src="/search.png" alt="" style={{ width: 50}} />
+                        </Button>
+                        <Button 
+                            className="btn_hover"
+                            onClick={handleClear}
+                            >
+                            <img src="/clear1.png" alt="" style={{ width: 50}} />
                         </Button>
                     </Grid>
                 </Grid>
