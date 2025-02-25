@@ -11,6 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import SearchIcon from '@mui/icons-material/Search';
+import BackspaceIcon from '@mui/icons-material/Backspace';
 
 function Search_Final_store_inventory_report({ onSearch }) {
     const [error , setError] = useState(null);
@@ -178,31 +179,31 @@ function Search_Final_store_inventory_report({ onSearch }) {
                     </Grid>
 
                     <Grid  item xs={2} md={1} style={{ marginLeft: '85px' }} >
-                        {/* <Button 
-                            variant="contained" 
-                            // size="small"
-                            style={{width: '130px', height: '55px' , marginTop: '5px'}}
-                            onClick={handleSearch}
-                            endIcon={<SearchIcon />}
-                            >Search
-                        </Button> */}
-                        <Button 
-                            className="btn_hover"
-                            onClick={handleSearch}
-                            // style={{marginTop: '5px'}}
-                            // variant="contained" 
-                            // // size="small"
-                            // onClick={handleSearch}
-                            // endIcon={<SearchIcon />}
-                            >
-                            <img src="/search.png" alt="" style={{ width: 50}} />
-                        </Button>
-                        <Button 
-                            className="btn_hover"
-                            onClick={handleClear}
-                            >
-                            <img src="/clear1.png" alt="" style={{ width: 50}} />
-                        </Button>
+                        <div style={{ display: 'grid', placeItems: 'center' }}>
+                            <Button 
+                                variant="contained" 
+                                className="btn_hover"
+                                // size="small"
+                                style={{width: '130px', height: '55px' , marginTop: '5px'}}
+                                onClick={handleSearch}
+                                endIcon={<SearchIcon />}
+                                >Search
+                            </Button>
+                        </div>
+                    </Grid>
+                    <Grid  item xs={2} md={1} style={{ marginLeft: '5px' }} >
+                        <div style={{ display: 'grid', placeItems: 'center' }}>
+                            <Button 
+                                variant="contained" 
+                                className="btn_hover"
+                                // size="small"
+                                color="warning"
+                                style={{width: '130px', height: '55px' , marginTop: '5px', }}
+                                onClick={handleClear}
+                                endIcon={<BackspaceIcon />}
+                                >Clear
+                            </Button>
+                        </div>
                     </Grid>
                 </Grid>
             </Box>
