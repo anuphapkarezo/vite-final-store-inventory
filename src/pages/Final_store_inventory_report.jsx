@@ -313,7 +313,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     { field: 'factory', headerName: 'Factory', width: 65 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' },
     { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left' },
-    { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    // { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'vd_name', headerName: 'Vendor name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'buyer_name', headerName: 'Buyer Name', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'count_pack', headerName: 'Total Packing', width: 135 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
@@ -417,7 +417,7 @@ export default function Final_store_inventory_report({ onSearch }) {
   const columns_MatSummaryByStdPack= [
     { field: 'loc_code', headerName: 'Location', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center'},
     { field: 'mat_item', headerName: 'MAT Item', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left' },
-    { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
+    { field: 'vd_name', headerName: 'Vendor name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'std_pack', headerName: 'Pcs/Pack', width: 100 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'right',
       valueFormatter: (params) => {
         if (params.value == null) {
@@ -604,7 +604,7 @@ export default function Final_store_inventory_report({ onSearch }) {
                 setSelectedCleardata(queryParams.clear_data);
               }}
           />
-          <div  style={{backgroundColor:'#DFF5FF' , height: 570 , width: 1575}}>
+          <div  style={{backgroundColor:'#DFF5FF' , height: 570 , width: 1225}}>
             {isLoading ? (
               <Custom_Progress />
             ) : (
@@ -647,7 +647,7 @@ export default function Final_store_inventory_report({ onSearch }) {
             <Box
               sx={{
                 ...style_Modal,
-                width: 1210,
+                width: 1115,
                 height: 700,
                 backgroundColor: "#CAF4FF",
               }}
