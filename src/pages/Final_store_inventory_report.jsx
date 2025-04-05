@@ -316,7 +316,7 @@ export default function Final_store_inventory_report({ onSearch }) {
     // { field: 'mat_name', headerName: 'Description', width: 350 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'vd_name', headerName: 'Vendor name', width: 250 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
     { field: 'buyer_name', headerName: 'Buyer Name', width: 120 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'left'},
-    { field: 'count_pack', headerName: 'Total Packing', width: 135 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
+    { field: 'count_pack', headerName: 'Total Qty. (pack)', width: 135 , headerAlign: 'center' , headerClassName: 'bold-header' , align: 'center' ,
       valueFormatter: (params) => {
         if (params.value == null) {
           return '';
